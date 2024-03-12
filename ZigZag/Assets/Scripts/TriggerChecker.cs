@@ -28,6 +28,7 @@ public class TriggerChecker : MonoBehaviour
     private void FallDawn()
     {
         rigidbody.useGravity = true;
+        rigidbody.isKinematic = false;
     }
 
     IEnumerator WaitToFall() 

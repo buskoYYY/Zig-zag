@@ -7,6 +7,7 @@ public class Controller : MonoBehaviour
 {
     [Header("Elements")]
     [SerializeField] GameObject virtualCamera;
+    [SerializeField] GameObject particlesPref;
     Rigidbody rb;
 
     [Header("Settings")]
@@ -26,10 +27,11 @@ public class Controller : MonoBehaviour
             {
                 rb.velocity = new Vector3(speed, 0, 0); // степень изменения позиции
                 isStarted = true;
+
+                GameManager.instance.StartGame();
             }
         }
 
-        Debug.DrawRay(transform.position, Vector3.down, Color.red, 3f);
 
         if (Physics.Raycast(transform.position, Vector3.down, 4f) == false)
         {
@@ -37,6 +39,8 @@ public class Controller : MonoBehaviour
             rb.constraints = RigidbodyConstraints.None;
             rb.velocity = new Vector3(0, -25, 0);
             virtualCamera.SetActive(false);
+
+            GameManager.instance.GameOver();
         }
 
 
@@ -58,4 +62,15 @@ public class Controller : MonoBehaviour
             rb.velocity = new Vector3(0, 0, speed);
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag =="Diamond")
+        {
+            GameObject particles = Instantiate(particlesPref, other.transform.position,Quaternion.identity);
+            Destroy(other.gameObject);
+            Destroy(particles,1f);
+        }
+    }
+
 }
